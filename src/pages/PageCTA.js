@@ -1,7 +1,8 @@
 import React from "react";
+import Form from "../components/Form/Form";
 
 const PageCTA = () => {
-    return <h1>CTA Page</h1>;
+  return <Form />;
 };
 
 export default PageCTA;
