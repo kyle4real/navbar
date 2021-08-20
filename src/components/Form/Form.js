@@ -47,9 +47,15 @@ const errorCheck = (inputs) => {
 };
 
 const Form = () => {
+  const [isSignIn, setIsSignIn] = useState(true);
   const [inputs, setInputs] = useState(initialInputs);
   const [inputsErrors, setInputsErrors] = useState(initialInputsErrors);
   const [message, setMessage] = useState(null);
+
+  const isSignInHandler = () => {
+    setIsSignIn((p) => !p);
+    setInputsErrors(initialInputsErrors);
+  };
 
   const inputChangeHandler = (e) => {
     const id = e.target.id;
@@ -108,7 +114,10 @@ const Form = () => {
         noValidate
         autoComplete="off"
       >
-        <h2 className={classes.form__title}>Create an Account</h2>
+        <h2 className={classes.form__title}>
+          {!isSignIn && <>Create an Account</>}
+          {isSignIn && <>Sign In</>}
+        </h2>
         <p className={classes.form__description}>
           One account. All access. Always free.
         </p>
@@ -123,17 +132,19 @@ const Form = () => {
           />
           {inputsErrors.username && errorMsg(inputsErrors.username)}
         </div>
-        <div className={classes.form__control}>
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            value={inputs.email}
-            onChange={inputChangeHandler}
-            onBlur={inputBlurHandler}
-          />
-          {inputsErrors.email && errorMsg(inputsErrors.email)}
-        </div>
+        {!isSignIn && (
+          <div className={classes.form__control}>
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={inputs.email}
+              onChange={inputChangeHandler}
+              onBlur={inputBlurHandler}
+            />
+            {inputsErrors.email && errorMsg(inputsErrors.email)}
+          </div>
+        )}
         <div className={classes.form__control}>
           <label htmlFor="password">Password</label>
           <input
@@ -146,9 +157,28 @@ const Form = () => {
           {inputsErrors.password && errorMsg(inputsErrors.password)}
         </div>
         <button className={classes.form__button}>
-          <AiFillLock className={classes.form__button__icon} />
-          Create Account
+          {!isSignIn && (
+            <>
+              <AiFillLock className={classes.form__button__icon} />
+              Create Account
+            </>
+          )}
+          {isSignIn && <>Sign In</>}
         </button>
+        <span className={classes.form__switch}>
+          {!isSignIn && (
+            <>
+              Already have an account?{" "}
+              <button onClick={isSignInHandler}>Sign In</button>
+            </>
+          )}
+          {isSignIn && (
+            <>
+              Don't have an account?{" "}
+              <button onClick={isSignInHandler}>Create Account</button>
+            </>
+          )}
+        </span>
       </form>
       {message && <p className={classes.message}>{message}</p>}
     </div>

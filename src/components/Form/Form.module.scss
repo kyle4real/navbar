@@ -59,6 +59,7 @@
     }
   }
   &__button {
+    width: 100%;
     display: block;
     margin: 0 auto;
     cursor: pointer;
@@ -75,10 +76,6 @@
     font-weight: 400;
     box-shadow: $sharpBoxShadow;
 
-    &:hover {
-      box-shadow: $sharperBoxShadow;
-    }
-
     &:active {
       box-shadow: $sharpestBoxShadow;
     }
@@ -86,6 +83,25 @@
     &__icon {
       margin-bottom: -2.5px;
       margin-right: $spacing-sm;
+    }
+  }
+  &__switch {
+    display: block;
+    text-align: center;
+    margin-top: $spacing-md;
+    font-size: 0.9rem;
+
+    button {
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      outline: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.9rem;
+      color: darken($dark, 10%);
+      font-family: inherit;
+      text-decoration: underline;
     }
   }
 }
