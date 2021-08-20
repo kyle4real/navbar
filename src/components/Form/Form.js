@@ -9,12 +9,6 @@ const initialInputs = {
   password: "",
 };
 
-const initialInputsErrors = {
-  username: "",
-  email: "",
-  password: "",
-};
-
 const isErrorsEqual = (obj1, obj2) => {
   return (
     obj1.username === obj2.username &&
@@ -24,7 +18,7 @@ const isErrorsEqual = (obj1, obj2) => {
 };
 
 const errorCheck = (inputs) => {
-  const errors = { ...initialInputsErrors };
+  const errors = { ...initialInputs };
   // username check
   if (inputs.username.length === 0) {
     errors.username = "Enter a username";
@@ -32,10 +26,12 @@ const errorCheck = (inputs) => {
     errors.username = "Username must not contain spaces";
   }
   // email check
-  if (inputs.email.length === 0) {
-    errors.email = "Enter an email";
-  } else if (!inputs.email.includes("@")) {
-    errors.email = "Enter a valid email";
+  if (inputs.email) {
+    if (inputs.email.length === 0) {
+      errors.email = "Enter an email";
+    } else if (!inputs.email.includes("@")) {
+      errors.email = "Enter a valid email";
+    }
   }
   // password check
   if (inputs.password.length === 0) {
@@ -49,12 +45,18 @@ const errorCheck = (inputs) => {
 const Form = () => {
   const [isSignIn, setIsSignIn] = useState(true);
   const [inputs, setInputs] = useState(initialInputs);
-  const [inputsErrors, setInputsErrors] = useState(initialInputsErrors);
+  const [inputsErrors, setInputsErrors] = useState(initialInputs);
   const [message, setMessage] = useState(null);
 
+  const reset = () => {
+    setInputs(initialInputs);
+    setInputsErrors(initialInputs);
+  };
+
   const isSignInHandler = () => {
+    reset();
+    setMessage(null);
     setIsSignIn((p) => !p);
-    setInputsErrors(initialInputsErrors);
   };
 
   const inputChangeHandler = (e) => {
@@ -79,7 +81,7 @@ const Form = () => {
   const inputBlurHandler = (e) => {
     const id = e.target.id;
     const errors = errorCheck(inputs);
-    if (!isErrorsEqual(errors, initialInputsErrors)) {
+    if (!isErrorsEqual(errors, initialInputs)) {
       setInputsErrors((p) => {
         const jawn = { ...p };
         jawn[id] = errors[id];
@@ -93,13 +95,17 @@ const Form = () => {
     e.preventDefault();
 
     const errors = errorCheck(inputs);
-    if (!isErrorsEqual(errors, initialInputsErrors)) {
+    if (!isErrorsEqual(errors, initialInputs)) {
       setInputsErrors(errors);
       return;
     }
 
-    setMessage("Your account has been created.");
-    setInputs(initialInputs);
+    if (isSignIn) {
+      setMessage("You have been signed in.");
+    } else {
+      setMessage("Your account has been created.");
+    }
+    reset();
   };
 
   const errorMsg = (msg) => {
